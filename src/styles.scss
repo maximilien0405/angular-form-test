@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+// Remove focus outline (blue)
+textarea:focus, input:focus{
+  outline: none !important;
+}
