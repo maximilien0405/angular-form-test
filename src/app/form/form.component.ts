@@ -37,9 +37,9 @@ export class FormComponent implements OnInit {
       mobile: ['', Validators.required],
       birthdate: ['', Validators.required],
       nationality: ['', Validators.required],
-      swiss_orig: ['', Validators.required],
-      prof: ['', Validators.required],
-      learning: ['', Validators.required],
+      swiss_orig: [''],
+      prof: [''],
+      learning: [''],
       lesson: ['', Validators.required],
       notes: [''],
     })
