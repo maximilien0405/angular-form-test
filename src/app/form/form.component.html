@@ -9,7 +9,7 @@
       <!-- CIVILITE -->
 
       <div class="col-span-6 sm:col-span-3">
-        <label for="country" class="block text-sm font-medium text-gray-700">Civilité</label>
+        <label for="country" class="block text-sm font-medium text-gray-700">Civilité *</label>
         <select formControlName="civ" [class.border-red]="errorForm && form.get('civ')?.errors" autocomplete="country-name" class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
           <option>Monsieur</option>
           <option>Madame</option>
@@ -21,49 +21,49 @@
       <!-- NOM DE FAMILLE -->
 
       <div class="col-span-6 sm:col-span-3">
-        <label for="last-name" class="block text-sm font-medium text-gray-700">Nom</label>
+        <label for="last-name" class="block text-sm font-medium text-gray-700">Nom *</label>
         <input formControlName="lastname" [class.border-red]="errorForm && form.get('lastname')?.errors" type="text" autocomplete="family-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 sm:text-sm focus:ring-0">
       </div>
 
       <!-- PRENOM -->
 
       <div class="col-span-6 sm:col-span-3">
-        <label for="first-name" class="block text-sm font-medium text-gray-700">Prénom</label>
+        <label for="first-name" class="block text-sm font-medium text-gray-700">Prénom *</label>
         <input formControlName="firstname" [class.border-red]="errorForm && form.get('firstname')?.errors" type="text" autocomplete="given-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
       </div>
 
       <!-- ADRESSE -->
 
       <div class="col-span-6">
-        <label for="street-address" class="block text-sm font-medium text-gray-700">Adresse</label>
+        <label for="street-address" class="block text-sm font-medium text-gray-700">Adresse *</label>
         <input formControlName="street" [class.border-red]="errorForm && form.get('street')?.errors" type="text" autocomplete="street-address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
       </div>
 
       <!-- NUMERO -->
 
       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
-        <label for="city" class="block text-sm font-medium text-gray-700">Numéro</label>
+        <label for="city" class="block text-sm font-medium text-gray-700">Numéro *</label>
         <input formControlName="number" [class.border-red]="errorForm && form.get('number')?.errors" type="text" name="city" id="city" autocomplete="address-level2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
       </div>
 
       <!-- VILLE -->
 
       <div class="col-span-6 sm:col-span-6 lg:col-span-3">
-        <label for="city" class="block text-sm font-medium text-gray-700">Ville</label>
+        <label for="city" class="block text-sm font-medium text-gray-700">Ville *</label>
         <input formControlName="city" [class.border-red]="errorForm && form.get('city')?.errors" type="text" name="city" id="city" autocomplete="address-level2" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
       </div>
 
       <!-- CODE POSTAL -->
 
       <div class="col-span-6 sm:col-span-3">
-        <label for="postal-code" class="block text-sm font-medium text-gray-700">Code postal</label>
+        <label for="postal-code" class="block text-sm font-medium text-gray-700">Code postal *</label>
         <input formControlName="zip" [class.border-red]="errorForm && form.get('zip')?.errors" type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
       </div>
 
       <!-- PAYS -->
 
       <div class="col-span-6 sm:col-span-3">
-        <label for="region" class="block text-sm font-medium text-gray-700">Pays</label>
+        <label for="region" class="block text-sm font-medium text-gray-700">Pays *</label>
         <select formControlName="country" [class.border-red]="errorForm && form.get('country')?.errors" class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
           <option>Suisse</option>
           <option>France</option>
@@ -77,34 +77,36 @@
 
       <div class="col-span-6 sm:col-span-3">
         <label for="region" class="block text-sm font-medium text-gray-700">Téléphone Fixe</label>
-        <input formControlName="phone" [class.border-red]="errorForm && form.get('phone')?.errors" type="text" name="price" id="price" class="block w-full rounded-md border-gray-300 focus:border-gray-400 focus:ring-0 sm:text-sm" placeholder="+41 76 111 11 11">
+        <input formControlName="phone" (focusout)="checkPhoneFormat(this.form.get('phone')?.value, 'phone')" [class.border-red]="(errorForm && form.get('phone')?.errors) || phoneError" type="text" name="price" id="price" class="block w-full rounded-md border-gray-300 focus:border-gray-400 focus:ring-0 sm:text-sm" placeholder="+xx xxx xx xx">
+        <p *ngIf="phoneError" class="text-red text-sm mt-2">Le numéro est invalide.</p>  
       </div>
 
       <!-- Téléphone Mobile -->
 
       <div class="col-span-6 sm:col-span-3">
-        <label for="region" class="block text-sm font-medium text-gray-700">Téléphone Mobile</label>
-        <input formControlName="mobile" [class.border-red]="errorForm && form.get('mobile')?.errors" type="text" name="price" id="price" class="block w-full rounded-md border-gray-300 focus:border-gray-400 focus:ring-0 sm:text-sm" placeholder="+41 76 111 11 11">
+        <label for="region" class="block text-sm font-medium text-gray-700">Téléphone Mobile *</label>
+        <input formControlName="mobile" (focusout)="checkPhoneFormat(this.form.get('mobile')?.value, 'mobile')" [class.border-red]="(errorForm && form.get('mobile')?.errors) || mobileError" type="text" name="price" id="price" class="block w-full rounded-md border-gray-300 focus:border-gray-400 focus:ring-0 sm:text-sm" placeholder="+xx xxx xx xx">
+        <p *ngIf="mobileError" class="text-red text-sm mt-2">Le numéro est invalide.</p>  
       </div>
 
       <!-- Email -->
 
       <div class="col-span-6 ">
-        <label class="block text-sm font-medium text-gray-700">Email</label>
+        <label class="block text-sm font-medium text-gray-700">Email *</label>
         <input formControlName="email" [class.border-red]="errorForm && form.get('email')?.errors" type="email" autocomplete="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
       </div>
 
       <!-- NAISSANCE -->
 
       <div class="col-span-6 sm:col-span-3">
-        <label class="block text-sm font-medium text-gray-700">Date de naissance</label>
+        <label class="block text-sm font-medium text-gray-700">Date de naissance *</label>
         <input formControlName="birthdate" [class.border-red]="errorForm && form.get('birthdate')?.errors" type="date" autocomplete="bday-day" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
       </div>
 
       <!-- NATIONALITE -->
 
       <div class="col-span-6 sm:col-span-3">
-        <label class="block text-sm font-medium text-gray-700">Nationalité</label>
+        <label class="block text-sm font-medium text-gray-700">Nationalité *</label>
         <input formControlName="nationality" [class.border-red]="errorForm && form.get('nationality')?.errors" type="text" autocomplete="country" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-400 focus:ring-0 sm:text-sm">
       </div>
 
@@ -153,6 +155,7 @@
     <div class="flex">
       <img *ngIf="errorForm && form.invalid" class="my-5 sm:my-0 h-6 w-auto mr-3" src="../../assets/warning.svg">
       <p *ngIf="errorForm && form.invalid" class="my-5 text-center text-red sm:text-left sm:my-0 text-sm">Merci de remplir tous les champs obligatoires.</p>
+      <p *ngIf="!errorForm" class="my-5 text-center  sm:text-left sm:my-0 text-sm">* Obligatoire</p>
     </div>
     <button type="submit" (click)="submitForm()" class="w-full sm:w-auto text-right inline-flex justify-center rounded-md border border-transparent bg-red py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red focus:ring-offset-2">
       <span *ngIf="!spinnerDisplay">Envoyer</span>

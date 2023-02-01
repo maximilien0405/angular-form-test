@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { parsePhoneNumber, AsYouType } from 'libphonenumber-js'
 
 @Component({
   selector: 'app-form',
@@ -15,6 +16,10 @@ export class FormComponent implements OnInit {
   public spinnerDisplay: boolean;
   public year: number = new Date().getFullYear();
   public sucess: boolean;
+
+  public phoneError: boolean;
+  public mobileError: boolean;
+
   private readonly API_URL = environment.apiUrl;
   private readonly DATABASE_NAME = environment.database;
   private readonly TOKEN = environment.jwtToken;
@@ -33,7 +38,7 @@ export class FormComponent implements OnInit {
       zip: ['', Validators.required],
       country: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: [''],
+      phone: ['', Validators.pattern('')],
       mobile: ['', Validators.required],
       birthdate: ['', Validators.required],
       nationality: ['', Validators.required],
@@ -62,6 +67,32 @@ export class FormComponent implements OnInit {
     return this.http.post(`${this.API_URL}/${this.DATABASE_NAME}/registration/check`, data, { headers: { 'Authorization': `Bearer ${this.TOKEN}`}, responseType: 'text'}, )
   }
 
+  // Check if phone number is valid
+  public checkPhoneFormat(number: any, field: string) {
+    if(!number) {
+      if(field == 'mobile') {
+        this.mobileError = true;
+      }
+    }
+
+    const phoneNumber = parsePhoneNumber(number)
+    if(phoneNumber.isValid() && number.includes('+')) {
+      const formattedNumber = new AsYouType().input(number)
+      this.form.get(field)?.setValue(formattedNumber)
+      if(field == 'mobile') {
+        this.mobileError = false;
+      } else if(field == 'phone') {
+        this.phoneError = false;
+      }
+    } else {
+      if(field == 'mobile') {
+        this.mobileError = true;
+      } else if(field == 'phone') {
+        this.phoneError = true;
+      }
+    }
+  }
+
   // Methode d'envoi du formulaire
   public submitForm() {
     // Si form déjà entrain d'être submit
@@ -70,7 +101,7 @@ export class FormComponent implements OnInit {
     }
 
     // Si form invalid
-    if(this.form.invalid) {
+    if(this.form.invalid || this.phoneError || this.mobileError) {
       this.errorForm = true;
     } 
     else {
