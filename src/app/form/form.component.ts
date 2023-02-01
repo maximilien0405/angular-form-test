@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -20,6 +20,9 @@ export class FormComponent implements OnInit {
   public phoneError: boolean;
   public mobileError: boolean;
 
+  public deferredPrompt: any;
+  public showButton = false;
+  
   private readonly API_URL = environment.apiUrl;
   private readonly DATABASE_NAME = environment.database;
   private readonly TOKEN = environment.jwtToken;
@@ -54,6 +57,32 @@ export class FormComponent implements OnInit {
       this.allCours = res;
       this.form.get('lesson')?.setValue(res[0].text)
     });
+  }
+
+
+  @HostListener('window:beforeinstallprompt', ['$event'])
+  onbeforeinstallprompt(e: any) {
+    console.log(e);
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    this.deferredPrompt = e;
+    this.showButton = true;
+  }
+
+  addToHomeScreen() {
+    // Show the prompt
+    this.deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    this.deferredPrompt.userChoice
+    .then((choiceResult:any) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the A2HS prompt');
+      } else {
+        console.log('User dismissed the A2HS prompt');
+      }
+    });
+    this.deferredPrompt = null;
   }
 
   // Méthode pour get les cours
